@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Instagram,
   Linkedin,
@@ -93,18 +94,21 @@ export function Footer() {
           <div className="flex flex-col items-center md:items-start">
             <h3 className="text-lg font-semibold mb-6">Links Rápidos</h3>
             <nav className="flex flex-col gap-3 text-sm text-muted-foreground">
-              <a href="#inicio" className="hover:text-primary transition-colors">
+              <Link href="/#inicio" className="hover:text-primary transition-colors">
                 Início
-              </a>
-              <a href="#sobre" className="hover:text-primary transition-colors">
+              </Link>
+              <Link href="/#sobre" className="hover:text-primary transition-colors">
                 Sobre Mim
-              </a>
-              <a href="#servicos" className="hover:text-primary transition-colors">
+              </Link>
+              <Link href="/#servicos" className="hover:text-primary transition-colors">
                 Serviços
-              </a>
-              <a href="#contato" className="hover:text-primary transition-colors">
+              </Link>
+              <Link href="/blog" className="hover:text-primary transition-colors">
+                Blog
+              </Link>
+              <Link href="/#contato" className="hover:text-primary transition-colors">
                 Contato
-              </a>
+              </Link>
             </nav>
           </div>
         </div>
