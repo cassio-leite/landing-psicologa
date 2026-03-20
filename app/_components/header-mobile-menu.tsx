@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Menu } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/app/_components/ui/button";
 import {
   Sheet,
@@ -11,30 +12,40 @@ import {
 } from "@/app/_components/ui/sheet";
 
 const SECTIONS = [
-  { href: "#inicio", label: "Início" },
-  { href: "#sobre", label: "Sobre" },
-  { href: "#servicos", label: "Serviços" },
-  { href: "#contato", label: "Contato" },
+  { href: "/#inicio", id: "inicio", label: "Início" },
+  { href: "/#sobre", id: "sobre", label: "Sobre" },
+  { href: "/#servicos", id: "servicos", label: "Serviços" },
+  { href: "/#contato", id: "contato", label: "Contato" },
+  { href: "/blog", id: "blog", label: "Blog" },
 ] as const;
-
-function scrollToSection(href: string) {
-  const id = href.slice(1);
-  const el = document.getElementById(id);
-  if (!el) return;
-
-  const headerHeight = 64;
-  const top = el.getBoundingClientRect().top + window.scrollY - headerHeight;
-  window.scrollTo({ top, behavior: "smooth" });
-}
 
 export function HeaderMobileMenu() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
-  function handleNavClick(href: string) {
-    // 1. Fecha o Sheet imediatamente
+  function scrollToSection(id: string, href: string) {
+    if (id === "blog") {
+      router.push("/blog");
+      return;
+    }
+
+    if (pathname !== "/") {
+      router.push(href);
+      return;
+    }
+
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const headerHeight = 80; // h-20 aproximado
+    const top = el.getBoundingClientRect().top + window.scrollY - headerHeight;
+    window.scrollTo({ top, behavior: "smooth" });
+  }
+
+  function handleNavClick(id: string, href: string) {
     setOpen(false);
-    // 2. Aguarda a animação de saída do Radix (~300ms) antes de rolar
-    setTimeout(() => scrollToSection(href), 350);
+    setTimeout(() => scrollToSection(id, href), 350);
   }
 
   return (
@@ -46,17 +57,17 @@ export function HeaderMobileMenu() {
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="flex flex-col bg-chart-5"
+        className="flex flex-col bg-background"
       >
         <SheetTitle className="sr-only">Menu de navegação</SheetTitle>
         <nav
           className="flex flex-1 flex-col items-center justify-center gap-8 px-4"
           aria-label="Navegação principal"
         >
-          {SECTIONS.map(({ href, label }) => (
+          {SECTIONS.map(({ href, id, label }) => (
             <button
               key={href}
-              onClick={() => handleNavClick(href)}
+              onClick={() => handleNavClick(id, href)}
               className="w-full py-2 text-center font-serif text-2xl font-medium text-foreground transition-colors hover:text-foreground/80"
             >
               {label}
